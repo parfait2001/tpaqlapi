@@ -1,52 +1,104 @@
-# Gestion Scolaire API
+```markdown
+# 🚀 API de Gestion de Réservation de Salles
 
-Une API RESTful pour la gestion des salles de classe, cours et filières dans un établissement scolaire.
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-production-ready-brightgreen)
 
-## Fonctionnalités
+## ✨ Fonctionnalités
 
-- Gestion des salles (création, modification, suppression)
-- Gestion des cours (création, modification, suppression)
-- Gestion des filières (création, modification, suppression)
-- Gestion des classes (création, modification, suppression)
-- Authentification JWT
-- Assignation des salles aux classes
+**Gestion des salles**  
+✅ Création, modification, suppression  
+✅ Consultation des disponibilités  
+✅ Historique des réservations  
 
-## Installation
+**Gestion académique**  
+📚 Création et gestion des cours  
+🎓 Gestion des filières  
+🏫 Gestion des classes  
 
-1. Cloner le dépôt :
+**Sécurité**  
+🔒 Authentification JWT  
+👨‍💼 Rôles et permissions  
+🛡️ Protection des endpoints  
+
+**Réservations**  
+⏱️ Assignation des salles aux classes  
+🗓️ Gestion des créneaux horaires  
+⚠️ Prévention des conflits de réservation  
+
+## 🛠️ Installation
+
+### Prérequis
+- Python 3.9+
+- MySQL ou PostgreSQL
+- Git
+
+### 1. Clonage du dépôt
 ```bash
 git clone https://github.com/parfait2001/tpaqlapi.git
 cd tpaqlapi
+```
 
-## Créer un environnement virtuel :
-
+### 2. Configuration de l'environnement
+```bash
 python -m venv venv
-source venv/bin/activate  # Sur Linux/Mac
-venv\Scripts\activate     # Sur Windows
 
-## Installer les dépendances :
+# Linux/Mac
+source venv/bin/activate
 
+# Windows
+venv\Scripts\activate
+```
+
+### Installation des dépendances
+```bash
 pip install -r requirements.txt
-pip install -r dev-requirements.txt  # Pour le développement
-Configurer l'environnement :
 
+# Pour le développement
+pip install -r dev-requirements.txt
+```
 
-## Créer un fichier config.py à la racine avec :
+### 3. Configuration de l'application
+Créez `config.py`:
 
+```python
 class Config:
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/tpaql_db' # Pour Mysql
-    DATABASE_URL=postgresql://user:password@localhost/dbname  # Pour postgresql
+    # MySQL (par défaut)
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/tpaql_db'
+    
+    # PostgreSQL (alternative)
+    # SQLALCHEMY_DATABASE_URI = 'postgresql://user:password@localhost/dbname'
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JWT_SECRET_KEY = 'votre-secret-key'
+    JWT_SECRET_KEY = 'votre-secret-key-tres-securise'
+```
 
-Générer la clé avec le fichier key.py en l'executant tout simplement
+Générez une clé JWT:
+```bash
+python key.py
+```
 
-## Initialiser la base de données :
+### 4. Base de données
+```bash
 flask db init
-flask db migrate
+flask db migrate -m "Initial migration"
 flask db upgrade
-Utilisation
+```
 
-## Démarrer le serveur :
+## 🏃‍♂️ Utilisation
 
+Démarrer le serveur:
+```bash
 flask run
+```
+
+Accédez à: `http://localhost:5000`
+
+**Variables d'environnement:**
+| Variable | Valeur par défaut | Description |
+|----------|------------------|-------------|
+| FLASK_APP | app.py | Fichier principal |
+| FLASK_ENV | development | Mode d'exécution |
+| FLASK_DEBUG | 1 | Mode debug |
+
