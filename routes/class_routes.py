@@ -20,6 +20,11 @@ def create_class():
     if not name:
         return jsonify({'message': 'Nom de la classe requis'}), 400
 
+    # Vérifier si une classe avec ce nom existe déjà
+    existing_class = Classroom.query.filter_by(name=name).first()
+    if existing_class:
+        return jsonify({'message': 'Une classe avec ce nom existe déjà'}), 409
+
     new_class = Classroom(name=name)
     db.session.add(new_class)
     db.session.commit()
@@ -33,7 +38,6 @@ def get_class():
 
 @class_bp.route('/classes/<int:class_id>', methods=['PATCH'])
 @jwt_required()
-#@role_required('gestionnaire')
 def update_class(class_id):
     data = request.json
     name = data.get('name')
@@ -43,6 +47,14 @@ def update_class(class_id):
         return jsonify({'message': 'Classe non trouvée'}), 404
 
     if name:
+        # Vérifier si un autre classe a déjà ce nom
+        existing_class = Classroom.query.filter(
+            Classroom.name == name,
+            Classroom.id != class_id
+        ).first()
+        if existing_class:
+            return jsonify({'message': 'Une autre classe avec ce nom existe déjà'}), 409
+        
         classroom.name = name
 
     db.session.commit()
