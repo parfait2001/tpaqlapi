@@ -3,6 +3,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 import bcrypt
 from models import db
 from models.user import User
+from flask_cors import cross_origin
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -35,8 +36,11 @@ def register():
     return jsonify({'message': 'Utilisateur enregistré avec succès'}), 201
 
 # Route de connexion
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route('/login', methods=['POST','OPTIONS'])
+@cross_origin()
 def login():
+    if request.method == 'OPTIONS':
+        return {}, 200 
     data = request.json
     username = data.get('username')
     password = data.get('password')
@@ -62,4 +66,13 @@ def protected():
 @jwt_required()
 def me():
     current_user = get_jwt_identity()
-    return jsonify({'user': current_user}), 200
+    user = User.query.filter_by(username=current_user).first()
+    
+    if not user:
+        return jsonify({"message": "Utilisateur non trouvé"}), 404
+        
+    return jsonify({
+        "username": user.username,
+        "name": user.name,
+        "firstname": user.firstname,
+    }), 200

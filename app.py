@@ -14,11 +14,21 @@ from routes.field_routes import field_bp    # Import des routes des filières
 from routes.profile_routes import profile_bp  # Import des routes des profils
 from routes.user_profile_routes import user_profile_bp
 from routes.course_field_routes import course_field_bp
-
+from flask_cors import CORS 
+from flask import Flask, jsonify
 
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["http://localhost:3000"],
+        "methods": ["GET", "POST", "PATCH", "OPTIONS", "PUT", "DELETE"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "supports_credentials": True
+    }
+})
 
 db.init_app(app)
 migrate = Migrate(app, db)

@@ -80,20 +80,23 @@ def assign_room():
     data = request.json
     class_id = data.get('class_id')
     room_id = data.get('room_id')
-    course_id = data.get('course_id')
-    field_id = data.get('field_id')
+    # course_id = data.get('course_id')
+    # field_id = data.get('field_id')
     start_time = data.get('start_time')
     end_time = data.get('end_time')
 
-    if not all([class_id, room_id, course_id, field_id, start_time, end_time]):
+    # if not all([class_id, room_id, course_id, field_id, start_time, end_time]):
+    if not all([class_id, room_id, start_time, end_time]):
         return jsonify({'message': 'Données manquantes dans la requête'}), 400
 
     classroom = Classroom.query.get(class_id)
     room = Room.query.get(room_id)
-    course = Course.query.get(course_id)
-    field = Field.query.get(field_id)
+    # course = Course.query.get(course_id)
+    # field = Field.query.get(field_id)
 
-    if not classroom or not room or not course or not field:
+
+    # if not classroom or not room or not course or not field:
+    if not classroom or not room:
         return jsonify({'message': 'Classe, salle, cours ou filière non trouvée'}), 404
 
     if not room.available:
@@ -103,8 +106,8 @@ def assign_room():
     room.available = False
 
     class_details = ClassDetails(
-        course_id=course_id,
-        field_id=field_id,
+        # course_id=course_id,
+        # field_id=field_id,
         class_id=class_id,
         room_id=room_id,
         start_time=start_time,
