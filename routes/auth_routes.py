@@ -66,4 +66,13 @@ def protected():
 @jwt_required()
 def me():
     current_user = get_jwt_identity()
-    return jsonify({'user': current_user}), 200
+    user = User.query.filter_by(username=current_user).first()
+    
+    if not user:
+        return jsonify({"message": "Utilisateur non trouvé"}), 404
+        
+    return jsonify({
+        "username": user.username,
+        "name": user.name,
+        "firstname": user.firstname,
+    }), 200
