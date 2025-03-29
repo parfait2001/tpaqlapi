@@ -33,8 +33,34 @@ def create_class():
 
 @class_bp.route('/classes', methods=['GET'])
 def get_class():
-    classrooms = Classroom.query.all()
-    return jsonify([classroom.to_dict() for classroom in classrooms]), 200
+    classes = db.session.query(
+        Classroom,
+        ClassDetails,
+        Room.name.label('room_name')
+    ).outerjoin(
+        ClassDetails, Classroom.id == ClassDetails.class_id
+    ).outerjoin(
+        Room, ClassDetails.room_id == Room.id
+    ).all()
+
+    result = []
+    for classroom, details, room_name in classes:
+        class_dict = classroom.to_dict()
+        if details:
+            class_dict.update({
+                'start_time': details.start_time.isoformat() if details.start_time else None,
+                'end_time': details.end_time.isoformat() if details.end_time else None,
+                'room_name': room_name
+            })
+        else:
+            class_dict.update({
+                'start_time': None,
+                'end_time': None,
+                'room_name': None
+            })
+        result.append(class_dict)
+
+    return jsonify(result), 200
 
 @class_bp.route('/classes/<int:class_id>', methods=['PATCH'])
 @jwt_required()
