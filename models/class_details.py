@@ -3,12 +3,12 @@ from sqlalchemy.sql import func
 
 class ClassDetails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
-    field_id = db.Column(db.Integer, db.ForeignKey('field.id'), nullable=False)
-    class_id = db.Column(db.Integer, db.ForeignKey('classroom.id'), nullable=False)
-    room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
-    start_time = db.Column(db.DateTime, nullable=False)
-    end_time = db.Column(db.DateTime, nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=True)
+    field_id = db.Column(db.Integer, db.ForeignKey('field.id'), nullable=True)
+    class_id = db.Column(db.Integer, db.ForeignKey('classroom.id'), nullable=True)
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=True)
+    start_time = db.Column(db.DateTime, nullable=True)
+    end_time = db.Column(db.DateTime, nullable=True)
 
     course = db.relationship('Course', backref=db.backref('class_details', lazy=True))
     field = db.relationship('Field', backref=db.backref('class_details', lazy=True))
